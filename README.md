@@ -17,6 +17,16 @@ Hands-on practice comparing modern, legacy, and broken symmetric (secret key) al
 1. Run modern ciphers & speed benchmark: `node 01-modern-and-speed.js`
 2. Test legacy & broken ciphers: `node 02-legacy-and-broken.js`
 
-## My Benchmark Results
-*(Paste your terminal output here after running the scripts)*
+## My Benchmark Results (50 MB Payload)
+
+| Algorithm | Time | Relative Speed | Key Takeaway |
+| :--- | :--- | :--- | :--- |
+| **AES-256-GCM** | `36.878ms` | Fastest (Baseline) | Benefits from modern CPU hardware acceleration (AES-NI). |
+| **ChaCha20-Poly1305** | `49.477ms` | ~1.3x slower than AES | Very fast stream cipher; excels on mobile devices without AES hardware. |
+| **3DES** | `1.808s` (`1808ms`) | **~49x slower than AES** | Legacy cipher; massive performance penalty confirms why it is being retired. |
+
+### Security & Integrity Checks
+* **Broken Algorithms (`DES`, `RC4`):** Blocked at runtime (`ERR_OSSL_EVP_UNSUPPORTED`) by modern OpenSSL/Node.js defaults.
+* **Tamper Detection (`AES-256-GCM`):** Modifying a single byte of ciphertext caused decryption to fail immediately (`Unsupported state or unable to authenticate data`).
+
 
